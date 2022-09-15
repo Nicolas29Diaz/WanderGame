@@ -53,6 +53,7 @@ public class MovementPlayer : MonoBehaviour
 
     [Header("Pegar")]
     public bool pegando = false;
+    public bool cambiarMano = false;
 
     // Start is called before the first frame update
     void Start()
@@ -134,9 +135,17 @@ public class MovementPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && !saltando && !pegando && isGrounded)//!isGrounded)
         {
             
+
+            animator.SetBool("cambiarMano", cambiarMano);
+
+            cambiarMano = !cambiarMano;
+
             animator.SetBool("Pegar", true);
 
             pegando = true;
+
+            
+
 
         }
         //else
@@ -144,6 +153,7 @@ public class MovementPlayer : MonoBehaviour
         //    pegando = false;
         //}
 
+        
 
         }
 
