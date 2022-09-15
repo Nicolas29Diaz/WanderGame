@@ -11,6 +11,7 @@ public class MovementPlayer : MonoBehaviour
     //Para saltar
     public float jumpForce = 2f;
     public bool doubleJump;
+    public bool saltando;
 
     [Header("Tocar Piso")]
     public bool isGrounded;
@@ -50,6 +51,9 @@ public class MovementPlayer : MonoBehaviour
     public float ultimoVerX;
     public bool escaleraFrente;
 
+    [Header("Pegar")]
+    public bool pegando = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,13 +79,16 @@ public class MovementPlayer : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
 
         //PARA SALTAR
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !pegando)
         {
+            saltando = true;
+
             if (isGrounded)
             {
                 doubleJump = true;
                 rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
                 animator.SetBool("salto", true);
+                
             }
             else
             {
@@ -105,7 +112,7 @@ public class MovementPlayer : MonoBehaviour
         }
         else
         {
-
+            saltando = false;
             animator.SetBool("doubleJump", false);
             animator.SetBool("salto", false);
         }
@@ -123,7 +130,22 @@ public class MovementPlayer : MonoBehaviour
             }
         }
 
-    }
+
+        if (Input.GetKeyDown(KeyCode.C) && !saltando && !pegando && isGrounded)//!isGrounded)
+        {
+            
+            animator.SetBool("Pegar", true);
+
+            pegando = true;
+
+        }
+        //else
+        //{
+        //    pegando = false;
+        //}
+
+
+        }
 
     private void FixedUpdate()
     {
@@ -133,7 +155,7 @@ public class MovementPlayer : MonoBehaviour
         rb.AddForce(gravity, ForceMode.Acceleration);
 
         //Movimiento
-        if (runing)
+        if (runing && !pegando)
         {
             Vector3 movimiento = new Vector3(verX, 0, 0);
 
@@ -222,4 +244,11 @@ public class MovementPlayer : MonoBehaviour
         }
     }
 
+
+
+    public void dejarPegar()
+    {
+        pegando = false;
+        animator.SetBool("Pegar", false);
+    }
 }
