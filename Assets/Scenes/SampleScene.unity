@@ -990,7 +990,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.449784, y: 2.3199997, z: -16.37658}
+  m_LocalPosition: {x: -26.079784, y: 2.3199997, z: -16.376352}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1090,7 +1090,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020537069}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.449784, y: 2.3199997, z: -16.37658}
+  m_LocalPosition: {x: -26.079784, y: 2.3199997, z: -16.376352}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 334274368}
@@ -1282,8 +1282,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270482078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.0575, y: 0, z: -5.12}
-  m_LocalScale: {x: 3.3885846, y: 1, z: 0.6263301}
+  m_LocalPosition: {x: -17.3769, y: -0, z: -5.12}
+  m_LocalScale: {x: 5.4525714, y: 1, z: 0.6263301}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -1496,7 +1496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4870357138254281697, guid: 411345ba40488bc4188f1c038866d542, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.45
+      value: -26.08
       objectReference: {fileID: 0}
     - target: {fileID: 4870357138254281697, guid: 411345ba40488bc4188f1c038866d542, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1504,7 +1504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4870357138254281697, guid: 411345ba40488bc4188f1c038866d542, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.630227
+      value: -5.63
       objectReference: {fileID: 0}
     - target: {fileID: 4870357138254281697, guid: 411345ba40488bc4188f1c038866d542, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1537,6 +1537,10 @@ PrefabInstance:
     - target: {fileID: 4907874102138788873, guid: 411345ba40488bc4188f1c038866d542, type: 3}
       propertyPath: speed
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907874102138788873, guid: 411345ba40488bc4188f1c038866d542, type: 3}
+      propertyPath: moveSmoothTime
+      value: 0.105
       objectReference: {fileID: 0}
     - target: {fileID: 5250401874076459355, guid: 411345ba40488bc4188f1c038866d542, type: 3}
       propertyPath: m_Name

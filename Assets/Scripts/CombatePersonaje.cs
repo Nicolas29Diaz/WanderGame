@@ -61,7 +61,6 @@ public class CombatePersonaje : MonoBehaviour
 
         if (movPlayer.escalando)
         {
-            Quaternion rotArriba = Quaternion.Inverse(controladorDisparoArriba.rotation);
 
             if (movPlayer.mirandoArriba && movPlayer.mirandoDerecha) 
             {
@@ -71,36 +70,63 @@ public class CombatePersonaje : MonoBehaviour
             {
                 Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation * Quaternion.Euler(180f, 0f, 0f));//Rotar la instancia(por culpa del scale)
             }
-            else if (!movPlayer.mirandoArriba && movPlayer.mirandoDerecha)
-            {
-                Instantiate(nuez, controladorDisparoAbajo.position, controladorDisparoAbajo.rotation);//Rotar la instancia(por culpa del scale)
-            }
-            else if (!movPlayer.mirandoArriba && !movPlayer.mirandoDerecha)
-            {
-                Instantiate(nuez, controladorDisparoAbajo.position, controladorDisparoAbajo.rotation * Quaternion.Euler(180f, 0f, 0f));//Rotar la instancia(por culpa del scale)
-            }
+            //else if (!movPlayer.mirandoArriba && movPlayer.mirandoDerecha)
+            //{
+            //    Instantiate(nuez, controladorDisparoAbajo.position, controladorDisparoAbajo.rotation);//Rotar la instancia(por culpa del scale)
+            //}
+            //else if (!movPlayer.mirandoArriba && !movPlayer.mirandoDerecha)
+            //{
+            //    Instantiate(nuez, controladorDisparoAbajo.position, controladorDisparoAbajo.rotation * Quaternion.Euler(180f, 0f, 0f));//Rotar la instancia(por culpa del scale)
+            //}
 
         }
         else
         {
-            Quaternion r = Quaternion.Inverse(controladorDisparo.rotation);
+            //Quaternion r = Quaternion.Inverse(controladorDisparo.rotation);
 
-            if (!movPlayer.mirandoDerecha)
+            //if (!movPlayer.mirandoDerecha && !movPlayer.mirandoArriba)
+            //{
+            //    Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation * Quaternion.Euler(0f, 180f, 0f));
+            //    Debug.Log("MirandoIzqAbajo");
+            //}
+            //else if (movPlayer.mirandoDerecha && !movPlayer.mirandoArriba)
+            //{
+            //    Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation);
+            //    Debug.Log("MirandoDerechaAbajo");
+
+            //}else if(movPlayer.mirandoDerecha && movPlayer.mirandoArriba)
+            //{
+            //    Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation);
+            //    Debug.Log("MirandoDerechaArriba");
+            //}
+            //else if(!movPlayer.mirandoDerecha && movPlayer.mirandoArriba)
+            //{
+            //     Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation * Quaternion.Euler(180f, 0f, 0f));
+            //    Debug.Log("MirandoIzqA¡Arriba");
+            //}
+            if (movPlayer.mirandoArriba && movPlayer.mirandoDerecha)
             {
-                Instantiate(nuez, controladorDisparo.position, r);
+                Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation * Quaternion.Euler(0f, 180f, 0f));
+                //Debug.Log("MirandoArribaDerecha");
+                
             }
-            else if (movPlayer.mirandoDerecha)
+            else if (movPlayer.mirandoArriba && movPlayer.mirandoIzq)
             {
-                Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation);
+                Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation);
+                //Debug.Log("MirandoArribaIzquierda");
             }
+
+
+
+
+
+
         }
 
 
 
 
 
-        
-        
 
     }
 }

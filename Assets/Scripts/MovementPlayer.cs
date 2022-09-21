@@ -34,11 +34,16 @@ public class MovementPlayer : MonoBehaviour
     public float speedEscalando = 4f;
     private float speedInicial;
 
-    [Range(0,0.3f)]public float velSuavi;
-    public Vector3 vel = Vector3.zero;
+    [Range(0,0.3f)]public float moveSmoothTime;
+    public Vector2 currentDirection = Vector2.zero;
+    public Vector2 currentDirectionVelocity = Vector2.zero;
+    private Vector2 targetDir;
+
 
     public bool mirandoDerecha = true;
+    public bool mirandoIzq;
     public bool mirandoArriba;
+    public bool mirandoAbajo;
 
     [Header("'Mejorar' salto")]
     public bool betterJump = false;
@@ -83,7 +88,11 @@ public class MovementPlayer : MonoBehaviour
     {
         verX = Input.GetAxisRaw("Horizontal"); //Obtener eje horizontal
         verY = Input.GetAxisRaw("Vertical"); //Obtener eje vertical
+        
+        VistaMapache();
 
+        //targetDir para el smooth en el movimiento(si en y le pongo el verY realentizo un poco el personaje)
+        targetDir = new Vector2(verX, 0);
 
         //TOCO PISO
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.15f, groundLayer);
@@ -146,14 +155,6 @@ public class MovementPlayer : MonoBehaviour
             escalando = true;
             speed = speedEscalando;
 
-            if(verY > 0)
-            {
-                mirandoArriba = true;
-            }
-            else if(verY < 0)
-            {
-                mirandoArriba = false;
-            }
 
         }
         else
@@ -219,62 +220,125 @@ public class MovementPlayer : MonoBehaviour
 
     public void MoverPersonaje()
     {
+        //Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        targetDir.Normalize();
 
-        Vector3 movimiento = new Vector3(verX, 0, 0);
+        currentDirection = Vector2.SmoothDamp(currentDirection, targetDir, ref currentDirectionVelocity, moveSmoothTime);
+        //Vector3 movimiento = new Vector3(verX, 0, 0);
 
-        movimiento.Normalize();
+        //movimiento.Normalize();
 
-        transform.position += (transform.forward * movimiento.x * speed * Time.deltaTime);
+        transform.position += (transform.forward * currentDirection.x * speed * Time.deltaTime);
 
-        animator.SetFloat("Velx", verX);
+        animator.SetFloat("Velx", currentDirection.x);//Si se buguea la anim de mover mejor poner VerX
 
         //Para rotar el mapache
         if (verX < 0)
         {
             mapache.localScale = new Vector3(scale.x, scale.y, -scale.z);
-            mirandoDerecha = false;
-            //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
+    
         }
         else if (verX > 0)
         {
             mapache.localScale = new Vector3(scale.x, scale.y, scale.z);
+        }
+
+    }
+
+    public void VistaMapache()
+    {
+        if (verX == 0 && ultimoVerX < 0)
+        {
+
+            mirandoDerecha = false;
+            mirandoIzq = true;
+
+        }
+        else if (verX == 0 && ultimoVerX > 0)
+        {
             mirandoDerecha = true;
+            mirandoIzq = false;
+            
         }
-
-    }
-    public void MoverPersonaje2(float mover)
-    {
-        animator.SetFloat("Velx", verX);
-        Vector3 velocidadObj = new Vector3(mover, rb.velocity.y, 0);
-
-        rb.velocity = Vector3.SmoothDamp(rb.velocity.normalized, velocidadObj, ref vel, velSuavi);
-
-        if(mover > 0 && !mirandoDerecha)
+        ////////////////
+        if (verX < 0 && verY == 0)
         {
-            Girar();
+            mirandoDerecha = false;
+            mirandoArriba = false;
+            mirandoIzq = true;
+            mirandoAbajo = false;
+            ultimoVerX = -1;
+            //speed = speedInicial;
+
         }
-        else if(mover < 0 && mirandoDerecha)
+        else if (verX > 0 && verY == 0)
         {
-            Girar();
+            mirandoDerecha = true;
+            mirandoArriba = false;
+            mirandoIzq = false;
+            mirandoAbajo = false;
+            ultimoVerX = 1;
+            //speed = speedInicial;
+
+
         }
+        else if (verX > 0 && verY > 0)
+        {
+            mirandoDerecha = true;
+            mirandoArriba = true;
+            mirandoIzq = false;
+            mirandoAbajo = false;
+            ultimoVerX = 1;
+            //speed = 2;
+
+        }
+        else if (verX < 0 && verY > 0)
+        {
+            mirandoDerecha = false;
+            mirandoArriba = true;
+            mirandoIzq = true;
+            mirandoAbajo = false;
+            ultimoVerX = 1;
+            //speed = 2;
+
+        }
+        else if (verX > 0 && verY < 0)
+        {
+            mirandoDerecha = true;
+            mirandoArriba = false;
+            mirandoIzq = false;
+            mirandoAbajo = true;
+            ultimoVerX = 1;
+            //speed = 2;
+
+        }
+        else if (verX < 0 && verY < 0)
+        {
+            mirandoDerecha = false;
+            mirandoArriba = false;
+            mirandoIzq = true;
+            mirandoAbajo = true;
+            ultimoVerX = 1;
+            //speed = 2;
+
+        }
+        else if (verY > 0)
+        {
+            mirandoDerecha = false;
+            mirandoArriba = true;
+            mirandoIzq = false;
+            mirandoAbajo = false;
+        }
+        else if (verY < 0)
+        {
+            
+            mirandoDerecha = false;
+            mirandoArriba = false;
+            mirandoIzq = false;
+            mirandoAbajo = true;
+        }
+        
     }
-
-    public void Girar()
-    {
-        mirandoDerecha = !mirandoDerecha;
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
-
-
-        //Vector3 escala = transform.localScale;
-        //escala.z *= -1;
-        //transform.localScale = escala;
-    }
-
-
-    //public void rebote(Vector3 puntoGolpe)
-    //{
-    //    rb.velocity = new Vector3(-velocidadRebote.x * puntoGolpe, velocidadRebote.y, 0);
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -282,7 +346,7 @@ public class MovementPlayer : MonoBehaviour
         if (other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras"))
         {
             tocandoLayerEscaleras = true;
-            ultimoVerX = verX;
+            //ultimoVerX = verX;
             escaleraFrente = false;
 
         }
@@ -302,3 +366,39 @@ public class MovementPlayer : MonoBehaviour
         }
     }
 }
+
+
+
+//public void MoverPersonaje2(float mover)
+//{
+//    //animator.SetFloat("Velx", verX);
+//    //Vector3 velocidadObj = new Vector3(mover, rb.velocity.y, 0);
+
+//    //rb.velocity = Vector3.SmoothDamp(rb.velocity.normalized, velocidadObj, ref vel, velSuavi);
+
+//    //if(mover > 0 && !mirandoDerecha)
+//    //{
+//    //    Girar();
+//    //}
+//    //else if(mover < 0 && mirandoDerecha)
+//    //{
+//    //    Girar();
+//    //}
+//}
+
+//public void Girar()
+//{
+//    mirandoDerecha = !mirandoDerecha;
+//    transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
+
+
+//    //Vector3 escala = transform.localScale;
+//    //escala.z *= -1;
+//    //transform.localScale = escala;
+//}
+
+
+//public void rebote(Vector3 puntoGolpe)
+//{
+//    rb.velocity = new Vector3(-velocidadRebote.x * puntoGolpe, velocidadRebote.y, 0);
+//}
