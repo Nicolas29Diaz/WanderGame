@@ -10,6 +10,9 @@ public class ArdillaEnemy : MonoBehaviour
     public Transform jugador;
     public Transform controladorDisparo;
     public GameObject nuez;
+    public float distanciaFrenado;
+    public float distanciaRetroceso;
+
 
     private bool alerta;
 
@@ -24,34 +27,53 @@ public class ArdillaEnemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        alerta = Physics.CheckSphere(transform.position, rangoDeVision, capaJugador);
+    // void Update()
+    // {
+    //     alerta = Physics.CheckSphere(transform.position, rangoDeVision, capaJugador);
 
-        if (alerta)
-        {
-            transform.LookAt(new Vector3 (jugador.position.x, transform.position.y, jugador.position.z));
-            // transform.LookAt(jugador);
-            if (tiempoEsperado <= 0)
-            {
-                Disparar();
-                tiempoEsperado = tiempoEsperaAtaque;
-            } else
-            {
-                tiempoEsperado -= Time.deltaTime;
-            }
-            
-        }
-    }
+    //     if (alerta)
+    //     {
+    //         transform.LookAt(new Vector3 (jugador.position.x, transform.position.y, jugador.position.z));
+    //         // transform.LookAt(jugador);
+    //         if (tiempoEsperado <= 0)
+    //         {
+    //             Disparar();
+    //             tiempoEsperado = tiempoEsperaAtaque;
+    //         } else
+    //         {
+    //             tiempoEsperado -= Time.deltaTime;
+    //         }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, rangoDeVision);
-    }
+    //     }
+    // }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, rangoDeVision);
+    //}
 
     public void Disparar()
     {
         Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+                transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
+                // transform.LookAt(jugador);
+                if (tiempoEsperado <= 0)
+                {
+                    Disparar();
+                    tiempoEsperado = tiempoEsperaAtaque;
+                }
+                else
+                {
+                    tiempoEsperado -= Time.deltaTime;
+                }
+
+        }
     }
 }
