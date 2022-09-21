@@ -44,6 +44,7 @@ public class MovementPlayer : MonoBehaviour
     public bool mirandoIzq;
     public bool mirandoArriba;
     public bool mirandoAbajo;
+    public bool quieto;
 
     [Header("'Mejorar' salto")]
     public bool betterJump = false;
@@ -58,6 +59,8 @@ public class MovementPlayer : MonoBehaviour
     public float velocidadEscalar;
     private BoxCollider boxCollider;
     public bool escalando;
+
+    public bool puedoEscalar;
 
     public bool tocandoLayerEscaleras;
     public float ultimoVerX;
@@ -131,6 +134,12 @@ public class MovementPlayer : MonoBehaviour
         //ESCALAR
         animator.SetFloat("VelY", verY);
         Escalar();
+        if (puedoEscalar)
+        {
+           
+            //Escalar();
+        }
+        
 
     }
 
@@ -230,18 +239,22 @@ public class MovementPlayer : MonoBehaviour
 
         transform.position += (transform.forward * currentDirection.x * speed * Time.deltaTime);
 
-        animator.SetFloat("Velx", currentDirection.x);//Si se buguea la anim de mover mejor poner VerX
+        animator.SetFloat("Velx", verX);//Si se buguea la anim de mover mejor poner VerX
 
         //Para rotar el mapache
         if (verX < 0)
         {
             mapache.localScale = new Vector3(scale.x, scale.y, -scale.z);
+
     
         }
         else if (verX > 0)
         {
             mapache.localScale = new Vector3(scale.x, scale.y, scale.z);
         }
+
+
+
 
     }
 
@@ -252,14 +265,17 @@ public class MovementPlayer : MonoBehaviour
 
             mirandoDerecha = false;
             mirandoIzq = true;
+            quieto = true;
 
         }
         else if (verX == 0 && ultimoVerX > 0)
         {
             mirandoDerecha = true;
             mirandoIzq = false;
+            quieto = true;
             
         }
+
         ////////////////
         if (verX < 0 && verY == 0)
         {
@@ -268,6 +284,7 @@ public class MovementPlayer : MonoBehaviour
             mirandoIzq = true;
             mirandoAbajo = false;
             ultimoVerX = -1;
+            quieto = false;
             //speed = speedInicial;
 
         }
@@ -278,6 +295,7 @@ public class MovementPlayer : MonoBehaviour
             mirandoIzq = false;
             mirandoAbajo = false;
             ultimoVerX = 1;
+            quieto = false;
             //speed = speedInicial;
 
 
@@ -289,6 +307,7 @@ public class MovementPlayer : MonoBehaviour
             mirandoIzq = false;
             mirandoAbajo = false;
             ultimoVerX = 1;
+            quieto = false;
             //speed = 2;
 
         }
@@ -298,7 +317,8 @@ public class MovementPlayer : MonoBehaviour
             mirandoArriba = true;
             mirandoIzq = true;
             mirandoAbajo = false;
-            ultimoVerX = 1;
+            ultimoVerX = -1;
+            quieto = false;
             //speed = 2;
 
         }
@@ -309,6 +329,7 @@ public class MovementPlayer : MonoBehaviour
             mirandoIzq = false;
             mirandoAbajo = true;
             ultimoVerX = 1;
+            quieto = false;
             //speed = 2;
 
         }
@@ -318,23 +339,21 @@ public class MovementPlayer : MonoBehaviour
             mirandoArriba = false;
             mirandoIzq = true;
             mirandoAbajo = true;
-            ultimoVerX = 1;
+            ultimoVerX = -1;
+            quieto = false;
             //speed = 2;
 
         }
         else if (verY > 0)
         {
-            mirandoDerecha = false;
+        
             mirandoArriba = true;
-            mirandoIzq = false;
             mirandoAbajo = false;
         }
         else if (verY < 0)
         {
-            
-            mirandoDerecha = false;
+  
             mirandoArriba = false;
-            mirandoIzq = false;
             mirandoAbajo = true;
         }
         
@@ -365,6 +384,7 @@ public class MovementPlayer : MonoBehaviour
             tocandoLayerEscaleras = false;
         }
     }
+
 }
 
 

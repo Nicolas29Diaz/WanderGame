@@ -12,13 +12,16 @@ public class CombatePersonaje : MonoBehaviour
     public Transform controladorDisparoArriba;
     public Transform controladorDisparoAbajo;
     public GameObject nuez;
-
-
+    public bool cambioModoArma;
+    public bool armaEncontrada;
 
     // Start is called before the first frame update
     void Start()
     {
         movPlayer = GetComponent<MovementPlayer>();
+        cambioModoArma = false;
+        armaEncontrada = false;
+        movPlayer.puedoEscalar = true;
     }
 
     // Update is called once per frame
@@ -30,11 +33,33 @@ public class CombatePersonaje : MonoBehaviour
             PegarMelee();
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+       
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && armaEncontrada)
         {
-            Disparar();
+            cambioModoArma = !cambioModoArma;
+            movPlayer.puedoEscalar = !movPlayer.puedoEscalar;
         }
 
+        if (cambioModoArma && armaEncontrada)
+        {
+            Debug.Log("Disparo");
+            movPlayer.animator.SetLayerWeight(0, 0);
+            movPlayer.animator.SetLayerWeight(1, 1);
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Disparar();
+            }
+
+
+        }
+        else
+        {
+            Debug.Log("Arma");
+            movPlayer.animator.SetLayerWeight(0, 1);
+            movPlayer.animator.SetLayerWeight(1, 0);
+        }
 
     }
 
@@ -82,51 +107,61 @@ public class CombatePersonaje : MonoBehaviour
         }
         else
         {
-            //Quaternion r = Quaternion.Inverse(controladorDisparo.rotation);
-
-            //if (!movPlayer.mirandoDerecha && !movPlayer.mirandoArriba)
-            //{
-            //    Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation * Quaternion.Euler(0f, 180f, 0f));
-            //    Debug.Log("MirandoIzqAbajo");
-            //}
-            //else if (movPlayer.mirandoDerecha && !movPlayer.mirandoArriba)
-            //{
-            //    Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation);
-            //    Debug.Log("MirandoDerechaAbajo");
-
-            //}else if(movPlayer.mirandoDerecha && movPlayer.mirandoArriba)
-            //{
-            //    Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation);
-            //    Debug.Log("MirandoDerechaArriba");
-            //}
-            //else if(!movPlayer.mirandoDerecha && movPlayer.mirandoArriba)
-            //{
-            //     Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation * Quaternion.Euler(180f, 0f, 0f));
-            //    Debug.Log("MirandoIzqA¡Arriba");
-            //}
-            if (movPlayer.mirandoArriba && movPlayer.mirandoDerecha)
+            //DISPARAR HACIA ARRIBA
+            if (movPlayer.mirandoArriba && movPlayer.mirandoDerecha && movPlayer.quieto)
             {
-                Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation * Quaternion.Euler(0f, 180f, 0f));
-                //Debug.Log("MirandoArribaDerecha");
+
+                Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation );
                 
             }
-            else if (movPlayer.mirandoArriba && movPlayer.mirandoIzq)
+            else if (movPlayer.mirandoArriba && movPlayer.mirandoIzq && movPlayer.quieto)
             {
-                Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation);
-                //Debug.Log("MirandoArribaIzquierda");
+
+                Instantiate(nuez, controladorDisparoArriba.position, controladorDisparoArriba.rotation * Quaternion.Euler(0f, 180f, 0f));
+                
             }
 
+            //DISPARAR HACIA LOS LADOS
+            else if (movPlayer.mirandoIzq && !movPlayer.mirandoArriba && !movPlayer.mirandoAbajo)
+            {
 
+                Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation * Quaternion.Euler(180f, 0f, 0f));
+         
+            }
+            else if (movPlayer.mirandoDerecha &&  !movPlayer.mirandoArriba && !movPlayer.mirandoAbajo)
+            {
 
+                Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation);
+
+            }
+
+            //DISPARAR DIAGONAL
+            else if (movPlayer.mirandoIzq && !movPlayer.quieto && movPlayer.mirandoArriba && !movPlayer.mirandoAbajo)
+            {
+
+                Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation * Quaternion.Euler(-160f, 0f, 0f));
+
+            }
+            else if (movPlayer.mirandoDerecha && !movPlayer.quieto && movPlayer.mirandoArriba && !movPlayer.mirandoAbajo)
+            {
+
+                Instantiate(nuez, controladorDisparo.position, controladorDisparo.rotation * Quaternion.Euler(-20f, 0f, 0f));
+
+            }
 
 
 
         }
 
+    }
 
 
 
-
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("LanzaNueces"))
+        {
+            armaEncontrada = true;
+        }
     }
 }
