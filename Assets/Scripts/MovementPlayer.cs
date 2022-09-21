@@ -8,7 +8,6 @@ public class MovementPlayer : MonoBehaviour
     public Rigidbody rb;
 
     [Header("Saltar")]
-    //Para saltar
     public float jumpForce = 2f;
     public bool doubleJump;
     public bool saltando;
@@ -29,27 +28,38 @@ public class MovementPlayer : MonoBehaviour
 
     [Header("Movimiento")]
     //Movimiento mapache
-    float verX,verY;
-    public bool runing = true;
+    public float verX, verY;
+    public bool puedoMover = true;
     public float speed = 8f;
     public float speedEscalando = 4f;
     private float speedInicial;
 
+    [Range(0,0.3f)]public float velSuavi;
+    public Vector3 vel = Vector3.zero;
+
+    public bool mirandoDerecha = true;
+    public bool mirandoArriba;
 
     [Header("'Mejorar' salto")]
     public bool betterJump = false;
     public float fallMultiplier = 0.5f;
     public float lowJumpMult = 1f;
 
+    [Header("Gravedad")]
+    public float globalGravity = -9.81f;
+    private float gravedadInicial;
+
     [Header("Trepar")]
     public float velocidadEscalar;
     private BoxCollider boxCollider;
-    private float gravedadInicial;
     public bool escalando;
-    public float globalGravity = -9.81f;
+
     public bool tocandoLayerEscaleras;
     public float ultimoVerX;
     public bool escaleraFrente;
+
+    [Header("Rebotar recibir daño")]
+    public Vector3 velocidadRebote;
 
     [Header("Pegar")]
     public bool pegando = false;
@@ -72,44 +82,17 @@ public class MovementPlayer : MonoBehaviour
     void Update()
     {
         verX = Input.GetAxisRaw("Horizontal"); //Obtener eje horizontal
-
         verY = Input.GetAxisRaw("Vertical"); //Obtener eje vertical
 
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.15f, groundLayer); //Saber si toca el piso
-    
+
+        //TOCO PISO
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.15f, groundLayer);
         animator.SetBool("isGrounded", isGrounded);
 
-        //PARA SALTAR
+        //SALTAR
         if (Input.GetKeyDown(KeyCode.Space) && !pegando)
         {
-            saltando = true;
-
-            if (isGrounded)
-            {
-                doubleJump = true;
-                rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-                animator.SetBool("salto", true);
-                
-            }
-            else
-            {
-
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    if (doubleJump)
-                    {
-                        animator.SetBool("doubleJump", true);
-                        rb.velocity = Vector3.zero;
-                        rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-                        doubleJump = false;
-
-                    }
-
-                }
-                
-
-            }
-
+            Saltar();
         }
         else
         {
@@ -118,81 +101,34 @@ public class MovementPlayer : MonoBehaviour
             animator.SetBool("salto", false);
         }
 
-        //Salto "Mejor"
-        if (betterJump)
-        {
-            if(rb.velocity.y < 0)
-            {
-                rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier) * Time.deltaTime;
-            }
-            if(rb.velocity.y < 0 && !Input.GetKey(KeyCode.Space))
-            {
-                rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMult) * Time.deltaTime;
-            }
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.C) && !saltando && !pegando && isGrounded)//!isGrounded)
-        {
-            
-
-            animator.SetBool("cambiarMano", cambiarMano);
-
-            cambiarMano = !cambiarMano;
-
-            animator.SetBool("Pegar", true);
-
-            pegando = true;
-
-            
-
-
-        }
-        //else
-        //{
-        //    pegando = false;
-        //}
-
         
 
-        }
+    }
 
     private void FixedUpdate()
     {
-        animator.SetFloat("VelY", verY);
-        //Para manipular la gravedad    
+
+        //GRAVEDAD 
         Vector3 gravity = globalGravity * Vector3.up;
         rb.AddForce(gravity, ForceMode.Acceleration);
 
-        //Movimiento
-        if (runing && !pegando)
+        //MOVIMIENTO
+        if (puedoMover && !pegando)
         {
-            Vector3 movimiento = new Vector3(verX, 0, 0);
-
-            movimiento.Normalize();
-          
-            transform.position += (transform.forward * movimiento.x * speed * Time.deltaTime);
-
-            animator.SetFloat("Velx", verX);
-
-            //Para rotar el mapache
-            if (verX < 0)
-            {
-                mapache.localScale = new Vector3(scale.x, scale.y, -scale.z);
-            }
-            else if (verX > 0)
-            {
-                mapache.localScale = new Vector3(scale.x, scale.y, scale.z);
-            }
+            MoverPersonaje();
+            //MoverPersonaje2(verX * Time.fixedDeltaTime); 
         }
-        
+
+        //ESCALAR
+        animator.SetFloat("VelY", verY);
         Escalar();
 
     }
 
+    //FUNCIONES
     private void Escalar()
     {
-
+        
         if (escaleraFrente)
         {
             animator.SetBool("escalando2", escalando);
@@ -201,6 +137,7 @@ public class MovementPlayer : MonoBehaviour
         {
             animator.SetBool("escalando", escalando);
         }
+
         if ((verY != 0 || escalando) && tocandoLayerEscaleras)
         {
             Vector3 velocidadSubida = new Vector3(rb.velocity.x, verY * velocidadEscalar);
@@ -208,7 +145,16 @@ public class MovementPlayer : MonoBehaviour
             globalGravity = 0f;
             escalando = true;
             speed = speedEscalando;
-            
+
+            if(verY > 0)
+            {
+                mirandoArriba = true;
+            }
+            else if(verY < 0)
+            {
+                mirandoArriba = false;
+            }
+
         }
         else
         {
@@ -222,43 +168,137 @@ public class MovementPlayer : MonoBehaviour
             escalando = false;
         }
 
-       
+
     }
+
+    public void Saltar()
+    {
+
+        saltando = true;
+
+        if (isGrounded)
+        {
+            doubleJump = true;
+            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+            animator.SetBool("salto", true);
+
+        }
+        else
+        {
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (doubleJump)
+                {
+                    animator.SetBool("doubleJump", true);
+                    rb.velocity = Vector3.zero;
+                    rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+                    doubleJump = false;
+
+                }
+
+            }
+
+
+        }
+
+
+        //Salto "Mejor"
+        if (betterJump)
+        {
+            if (rb.velocity.y < 0)
+            {
+                rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier) * Time.deltaTime;
+            }
+            if (rb.velocity.y < 0 && !Input.GetKey(KeyCode.Space))
+            {
+                rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMult) * Time.deltaTime;
+            }
+        }
+    }
+
+    public void MoverPersonaje()
+    {
+
+        Vector3 movimiento = new Vector3(verX, 0, 0);
+
+        movimiento.Normalize();
+
+        transform.position += (transform.forward * movimiento.x * speed * Time.deltaTime);
+
+        animator.SetFloat("Velx", verX);
+
+        //Para rotar el mapache
+        if (verX < 0)
+        {
+            mapache.localScale = new Vector3(scale.x, scale.y, -scale.z);
+            mirandoDerecha = false;
+            //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
+        }
+        else if (verX > 0)
+        {
+            mapache.localScale = new Vector3(scale.x, scale.y, scale.z);
+            mirandoDerecha = true;
+        }
+
+    }
+    public void MoverPersonaje2(float mover)
+    {
+        animator.SetFloat("Velx", verX);
+        Vector3 velocidadObj = new Vector3(mover, rb.velocity.y, 0);
+
+        rb.velocity = Vector3.SmoothDamp(rb.velocity.normalized, velocidadObj, ref vel, velSuavi);
+
+        if(mover > 0 && !mirandoDerecha)
+        {
+            Girar();
+        }
+        else if(mover < 0 && mirandoDerecha)
+        {
+            Girar();
+        }
+    }
+
+    public void Girar()
+    {
+        mirandoDerecha = !mirandoDerecha;
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
+
+
+        //Vector3 escala = transform.localScale;
+        //escala.z *= -1;
+        //transform.localScale = escala;
+    }
+
+
+    //public void rebote(Vector3 puntoGolpe)
+    //{
+    //    rb.velocity = new Vector3(-velocidadRebote.x * puntoGolpe, velocidadRebote.y, 0);
+    //}
+
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.gameObject.CompareTag("Escaleras"))
-        //{
-        //    Debug.Log("Touched a rail");
-        //}
-        if(other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras"))
+
+        if (other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras"))
         {
             tocandoLayerEscaleras = true;
             ultimoVerX = verX;
             escaleraFrente = false;
 
-
         }
-        else if(other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras2"))
+        else if (other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras2"))
         {
             tocandoLayerEscaleras = true;
             escaleraFrente = true;
         }
-        
-    
+
     }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 6)
         {
             tocandoLayerEscaleras = false;
         }
-    }
-
-
-
-    public void dejarPegar()
-    {
-        pegando = false;
-        animator.SetBool("Pegar", false);
     }
 }
