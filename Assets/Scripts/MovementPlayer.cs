@@ -45,6 +45,7 @@ public class MovementPlayer : MonoBehaviour
     public bool mirandoArriba;
     public bool mirandoAbajo;
     public bool quieto;
+    public float ultimoVerX;
 
     [Header("'Mejorar' salto")]
     public bool betterJump = false;
@@ -63,8 +64,9 @@ public class MovementPlayer : MonoBehaviour
     public bool puedoEscalar;
 
     public bool tocandoLayerEscaleras;
-    public float ultimoVerX;
+    
     public bool escaleraFrente;
+    public float ultimoVerXEscalar;
 
     [Header("Rebotar recibir daño")]
     public Vector3 velocidadRebote;
@@ -113,8 +115,6 @@ public class MovementPlayer : MonoBehaviour
             animator.SetBool("salto", false);
         }
 
-        
-
     }
 
     private void FixedUpdate()
@@ -132,12 +132,12 @@ public class MovementPlayer : MonoBehaviour
         }
 
         //ESCALAR
-        animator.SetFloat("VelY", verY);
-        Escalar();
+        
+        //Escalar();
         if (puedoEscalar)
         {
-           
-            //Escalar();
+            animator.SetFloat("VelY", verY);
+            Escalar();
         }
         
 
@@ -158,12 +158,24 @@ public class MovementPlayer : MonoBehaviour
 
         if ((verY != 0 || escalando) && tocandoLayerEscaleras)
         {
-            Vector3 velocidadSubida = new Vector3(rb.velocity.x, verY * velocidadEscalar);
-            rb.velocity = velocidadSubida;
-            globalGravity = 0f;
-            escalando = true;
-            speed = speedEscalando;
+            //Debug.Log(verY);
+            //Debug.Log(escalando);
+            if (verX != 0f && verX != ultimoVerXEscalar && !escaleraFrente)
+            {
+                escalando = false;
+                animator.SetBool("escalando", escalando);
+                //Debug.Log(ultimoVerXEscalar);
+                //Debug.Log("Caer");
+            }
+            else
+            {
+                Vector3 velocidadSubida = new Vector3(rb.velocity.x, verY * velocidadEscalar);
+                rb.velocity = velocidadSubida;
+                globalGravity = 0f;
+                escalando = true;
+                speed = speedEscalando;
 
+            }
 
         }
         else
@@ -364,9 +376,11 @@ public class MovementPlayer : MonoBehaviour
 
         if (other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras"))
         {
+            ultimoVerXEscalar = verX;
             tocandoLayerEscaleras = true;
             //ultimoVerX = verX;
             escaleraFrente = false;
+            //Debug.Log(ultimoVerXEscalar);
 
         }
         else if (other.gameObject.layer == 6 && other.gameObject.CompareTag("Escaleras2"))

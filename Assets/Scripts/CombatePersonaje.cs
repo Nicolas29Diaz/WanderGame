@@ -12,16 +12,20 @@ public class CombatePersonaje : MonoBehaviour
     public Transform controladorDisparoArriba;
     public Transform controladorDisparoAbajo;
     public GameObject nuez;
+
     public bool cambioModoArma;
-    public bool armaEncontrada;
+    public bool lanzaNuecesEncontrado;
+    public bool activarlanzaNueces;
+    public GameObject lanzaNueces;
 
     // Start is called before the first frame update
     void Start()
     {
         movPlayer = GetComponent<MovementPlayer>();
         cambioModoArma = false;
-        armaEncontrada = false;
+        lanzaNuecesEncontrado = false;
         movPlayer.puedoEscalar = true;
+        activarlanzaNueces = false;
     }
 
     // Update is called once per frame
@@ -31,17 +35,17 @@ public class CombatePersonaje : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && !movPlayer.saltando && !movPlayer.pegando && movPlayer.isGrounded)
         {
             PegarMelee();
-        }
+        }   
 
-       
-
-        if (Input.GetKeyDown(KeyCode.Alpha1) && armaEncontrada)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && lanzaNuecesEncontrado && !movPlayer.escalando)
         {
             cambioModoArma = !cambioModoArma;
             movPlayer.puedoEscalar = !movPlayer.puedoEscalar;
+            activarlanzaNueces = !activarlanzaNueces;
+            lanzaNueces.SetActive(activarlanzaNueces);
         }
 
-        if (cambioModoArma && armaEncontrada)
+        if (cambioModoArma && lanzaNuecesEncontrado)
         {
             Debug.Log("Disparo");
             movPlayer.animator.SetLayerWeight(0, 0);
@@ -56,7 +60,7 @@ public class CombatePersonaje : MonoBehaviour
         }
         else
         {
-            Debug.Log("Arma");
+            //Debug.Log("Arma");
             movPlayer.animator.SetLayerWeight(0, 1);
             movPlayer.animator.SetLayerWeight(1, 0);
         }
@@ -157,11 +161,12 @@ public class CombatePersonaje : MonoBehaviour
 
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("LanzaNueces"))
+        if (other.CompareTag("LanzaNueces") && Input.GetKeyDown(KeyCode.V))
         {
-            armaEncontrada = true;
+            Debug.Log("LANZA NUECES DESBLOQUEADO, PULSA '1' PARA CAMBIAR MODO DE ATAQUE");
+            lanzaNuecesEncontrado = true;
         }
-    }
+    }   
 }
