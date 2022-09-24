@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ArdillaEnemy : MonoBehaviour
 {
-
     public float rangoDeVision;
-    public LayerMask capaJugador;
+
     public Transform jugador;
     public Transform controladorDisparo;
     public GameObject nuez;
-    public float distanciaFrenado;
-    public float distanciaRetroceso;
 
+    public float distanciaFrenado;
+    public float distanciaRayo;
+
+    public float velocidad;
+    public Transform controladorSueloFrenado;
+    public bool infoSueloFrenado;
 
     private bool alerta;
 
@@ -26,31 +29,9 @@ public class ArdillaEnemy : MonoBehaviour
         tiempoEsperado = 0;
     }
 
-    // Update is called once per frame
-    // void Update()
-    // {
-    //     alerta = Physics.CheckSphere(transform.position, rangoDeVision, capaJugador);
-
-    //     if (alerta)
-    //     {
-    //         transform.LookAt(new Vector3 (jugador.position.x, transform.position.y, jugador.position.z));
-    //         // transform.LookAt(jugador);
-    //         if (tiempoEsperado <= 0)
-    //         {
-    //             Disparar();
-    //             tiempoEsperado = tiempoEsperaAtaque;
-    //         } else
-    //         {
-    //             tiempoEsperado -= Time.deltaTime;
-    //         }
-
-    //     }
-    // }
-
-    //private void OnDrawGizmos()
+    //private void Update()
     //{
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawWireSphere(transform.position, rangoDeVision);
+    //    infoSueloFrenado = Physics.Raycast(controladorSueloFrenado.position, Vector3.down, distanciaRayo);
     //}
 
     public void Disparar()
@@ -60,20 +41,41 @@ public class ArdillaEnemy : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        infoSueloFrenado = Physics.Raycast(controladorSueloFrenado.position, Vector3.down, distanciaRayo);
         if (other.CompareTag("Player"))
         {
-                transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
-                // transform.LookAt(jugador);
-                if (tiempoEsperado <= 0)
-                {
-                    Disparar();
-                    tiempoEsperado = tiempoEsperaAtaque;
-                }
-                else
-                {
-                    tiempoEsperado -= Time.deltaTime;
-                }
+            if (infoSueloFrenado == false)
+            {
+                transform.position = transform.position;
+            } 
+            else if (Vector3.Distance(transform.position, other.transform.position) < distanciaFrenado)
+            {
+                gameObject.GetComponent<MovPlataforma>().patrullando = false;
+                transform.Translate(Vector3.forward * -velocidad * Time.deltaTime);
+            }
 
+
+            transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
+            if (tiempoEsperado <= 0)
+            {
+                Disparar();
+                tiempoEsperado = tiempoEsperaAtaque;
+            }
+            else
+            {
+                tiempoEsperado -= Time.deltaTime;
+            }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        gameObject.GetComponent<MovPlataforma>().patrullando = true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(controladorSueloFrenado.transform.position, controladorSueloFrenado.transform.position + Vector3.down * distanciaRayo);
     }
 }
