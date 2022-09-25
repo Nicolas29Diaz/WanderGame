@@ -17,8 +17,6 @@ public class ArdillaEnemy : MonoBehaviour
     public Transform controladorSueloFrenado;
     public bool infoSueloFrenado;
 
-    private bool alerta;
-
     private float tiempoEsperado;
     public float tiempoEsperaAtaque = 3;
 
@@ -28,11 +26,6 @@ public class ArdillaEnemy : MonoBehaviour
     {
         tiempoEsperado = 0;
     }
-
-    //private void Update()
-    //{
-    //    infoSueloFrenado = Physics.Raycast(controladorSueloFrenado.position, Vector3.down, distanciaRayo);
-    //}
 
     public void Disparar()
     {
