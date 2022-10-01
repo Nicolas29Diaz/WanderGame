@@ -7,34 +7,44 @@ public class ArdillaMeleeEnemy : MonoBehaviour
     public float distanciaPerseguir;
     public float distanciaAtaque;
     public float velocidad;
+    public bool infoSueloFrenado;
+    public bool patrullaje;
 
     public GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
+        
     }
 
     private void OnTriggerStay(Collider other)
     {
+        infoSueloFrenado = gameObject.GetComponent<MovPlataforma>().infoSuelo;
+        patrullaje = gameObject.GetComponent<MovPlataforma>().patrullando;
         if (other.CompareTag("Player"))
         {
-            Comportamiento();
+            transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
+            if (infoSueloFrenado == false)
+            {
+                transform.position = transform.position;
+            }
+            else if (Vector3.Distance(transform.position, player.transform.position) < distanciaPerseguir)
+            {
+                patrullaje = false;
+                transform.Translate(Vector3.forward * velocidad * Time.deltaTime);
+            }
+
+            if (Vector3.Distance(transform.position, player.transform.position) < distanciaAtaque)
+            {
+                Debug.Log("estoy atacando");
+            }
         }
     }
 
-    public void Comportamiento()
+    private void OnTriggerExit(Collider other)
     {
-        transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
-        if (Vector3.Distance(transform.position, player.transform.position) < distanciaPerseguir)
-        {
-            gameObject.GetComponent<MovPlataforma>().patrullando = false;
-            transform.Translate(Vector3.forward * velocidad * Time.deltaTime);
-        } 
-        else if (Vector3.Distance(transform.position, player.transform.position) < distanciaAtaque)
-        {
-            Debug.Log("estoy atacando");
-        }
+        gameObject.GetComponent<MovPlataforma>().patrullando = true;
     }
 
 }
