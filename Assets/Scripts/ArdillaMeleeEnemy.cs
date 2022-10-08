@@ -8,20 +8,15 @@ public class ArdillaMeleeEnemy : MonoBehaviour
     public float distanciaAtaque;
     public float velocidad;
     public bool infoSueloFrenado;
-    public bool patrullaje;
 
     public GameObject player;
+    public Transform controladorSueloFrenado;
+    public float distanciaRayo;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     private void OnTriggerStay(Collider other)
     {
-        infoSueloFrenado = gameObject.GetComponent<MovPlataforma>().infoSuelo;
-        patrullaje = gameObject.GetComponent<MovPlataforma>().patrullando;
+        infoSueloFrenado = Physics.Raycast(controladorSueloFrenado.position, Vector3.down, distanciaRayo);
         if (other.CompareTag("Player"))
         {
             transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
@@ -31,10 +26,10 @@ public class ArdillaMeleeEnemy : MonoBehaviour
             }
             else if (Vector3.Distance(transform.position, player.transform.position) < distanciaPerseguir)
             {
-                patrullaje = false;
+                gameObject.GetComponent<MovPlataforma>().patrullando = false;
                 transform.Translate(Vector3.forward * velocidad * Time.deltaTime);
             }
-
+            
             if (Vector3.Distance(transform.position, player.transform.position) < distanciaAtaque)
             {
                 Debug.Log("estoy atacando");
