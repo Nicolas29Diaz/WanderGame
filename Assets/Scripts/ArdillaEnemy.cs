@@ -20,18 +20,10 @@ public class ArdillaEnemy : MonoBehaviour
     private float tiempoEsperado;
     public float tiempoEsperaAtaque = 3;
 
-    public Animator animator;
-
-
     // Start is called before the first frame update
     void Start()
     {
         tiempoEsperado = 0;
-    }
-
-    private void Update()
-    {
-        animator.SetBool("walk", true);
     }
 
     public void Disparar()
@@ -47,7 +39,6 @@ public class ArdillaEnemy : MonoBehaviour
             if (infoSueloFrenado == false)
             {
                 transform.position = transform.position;
-                animator.SetBool("walk", false);
             } 
             else if (Vector3.Distance(transform.position, other.transform.position) < distanciaFrenado)
             {
