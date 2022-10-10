@@ -32,7 +32,7 @@ public class CombatePersonaje : MonoBehaviour
     void Update()
     {
         //PEGAR
-        if (Input.GetKeyDown(KeyCode.C) && !movPlayer.saltando && !movPlayer.pegando && movPlayer.isGrounded)
+        if (Input.GetKeyDown(KeyCode.C) && !movPlayer.saltando && !movPlayer.pegando && movPlayer.isGrounded && !cambioModoArma)
         {
             PegarMelee();
         }   

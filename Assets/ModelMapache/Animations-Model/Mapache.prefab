@@ -559,7 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129bf0e684c0270458230d82dbbb95d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movimiento: {fileID: 4907874102138788873}
+  movimiento: {fileID: 0}
 --- !u!136 &4907874102007147405
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -738,6 +738,7 @@ MonoBehaviour:
   rb: {fileID: 4907874102138788885}
   jumpForce: 5
   doubleJump: 0
+  saltando: 0
   isGrounded: 1
   groundCheck: {fileID: 4907874102001398268}
   groundLayer:
@@ -745,18 +746,33 @@ MonoBehaviour:
     m_Bits: 8
   animator: {fileID: 1546653147501617563}
   mapache: {fileID: 4870357138254281697}
-  runing: 1
+  verX: 0
+  verY: 0
+  puedoMover: 1
   speed: 4
   speedEscalando: 1.5
+  moveSmoothTime: 0
+  currentDirection: {x: 0, y: 0}
+  currentDirectionVelocity: {x: 0, y: 0}
+  mirandoDerecha: 1
+  mirandoIzq: 0
+  mirandoArriba: 0
+  mirandoAbajo: 0
+  quieto: 0
+  ultimoVerX: 0
   betterJump: 0
   fallMultiplier: 0.5
   lowJumpMult: 1
+  globalGravity: -9.81
   velocidadEscalar: 1.5
   escalando: 0
-  globalGravity: -9.81
+  puedoEscalar: 0
   tocandoLayerEscaleras: 0
-  ultimoVerX: 0
   escaleraFrente: 0
+  ultimoVerXEscalar: 0
+  velocidadRebote: {x: 0, y: 0, z: 0}
+  pegando: 0
+  cambiarMano: 0
 --- !u!1 &5411433266714411520
 GameObject:
   m_ObjectHideFlags: 0
