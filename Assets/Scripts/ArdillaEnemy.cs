@@ -18,11 +18,14 @@ public class ArdillaEnemy : MonoBehaviour
     public bool infoSueloFrenado;
 
     private float tiempoEsperado;
-    public float tiempoEsperaAtaque = 3;
+    public float tiempoEsperaAtaque;
+
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = gameObject.GetComponent<Animator>();
         tiempoEsperado = 0;
     }
 
@@ -38,8 +41,14 @@ public class ArdillaEnemy : MonoBehaviour
         {
             if (infoSueloFrenado == false)
             {
+                animator.SetBool("walk", false);
                 transform.position = transform.position;
-            } 
+            }
+            else if (Vector3.Distance(transform.position, other.transform.position) == distanciaFrenado)
+            {
+                animator.SetBool("walk", false);
+                transform.position = transform.position;
+            }
             else if (Vector3.Distance(transform.position, other.transform.position) < distanciaFrenado)
             {
                 gameObject.GetComponent<MovPlataforma>().patrullando = false;
@@ -50,7 +59,9 @@ public class ArdillaEnemy : MonoBehaviour
             transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
             if (tiempoEsperado <= 0)
             {
-                Disparar();
+                transform.position = transform.position;
+                animator.SetBool("throw", true);
+                animator.SetBool("walk", false);
                 tiempoEsperado = tiempoEsperaAtaque;
             }
             else
@@ -69,5 +80,10 @@ public class ArdillaEnemy : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(controladorSueloFrenado.transform.position, controladorSueloFrenado.transform.position + Vector3.down * distanciaRayo);
+    }
+
+    public void Final_throw()
+    {
+        animator.SetBool("throw", false);
     }
 }

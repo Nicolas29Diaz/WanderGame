@@ -9,9 +9,12 @@ public class MovPlataforma : MonoBehaviour
 
     private bool moviendoDerecha;
     public bool infoSuelo;
+
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
+        animator = gameObject.GetComponent<Animator>();
         patrullando = true;
     }
 
@@ -19,6 +22,7 @@ public class MovPlataforma : MonoBehaviour
     {
         if (patrullando)
         {
+            animator.SetBool("walk", true);
             Patrullar();
         }
     }
