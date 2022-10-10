@@ -78,9 +78,9 @@ public class MovementPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
         scale = mapache.localScale;
-
+        print(scale);
         boxCollider = GetComponent<BoxCollider>();
         rb.useGravity = false;
         gravedadInicial = globalGravity;
@@ -100,7 +100,7 @@ public class MovementPlayer : MonoBehaviour
         targetDir = new Vector2(verX, 0);
 
         //TOCO PISO
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.15f, groundLayer);
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.15f, groundLayer);//0.15f
         animator.SetBool("isGrounded", isGrounded);
 
         //SALTAR
@@ -165,15 +165,17 @@ public class MovementPlayer : MonoBehaviour
                 escalando = false;
                 animator.SetBool("escalando", escalando);
                 //Debug.Log(ultimoVerXEscalar);
-                //Debug.Log("Caer");
+                Debug.Log("Caer");
             }
             else
             {
-                Vector3 velocidadSubida = new Vector3(rb.velocity.x, verY * velocidadEscalar);
+                speed = speedEscalando;
+                Vector3 velocidadSubida = new Vector3(0, verY * speed);//rb.velocity.x
+                //print(velocidadSubida);
                 rb.velocity = velocidadSubida;
                 globalGravity = 0f;
                 escalando = true;
-                speed = speedEscalando;
+                
 
             }
 
