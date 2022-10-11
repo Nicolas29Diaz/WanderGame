@@ -14,8 +14,7 @@ public class BossBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        rb.AddForce(Vector3.up * 2 * Time.deltaTime);
-        rb.AddForce(Vector3.right * 2 * Time.deltaTime);
+        rb.velocity = Vector3.Cross(new Vector3(5, rb.velocity.y, rb.velocity.z), animator.transform.forward);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

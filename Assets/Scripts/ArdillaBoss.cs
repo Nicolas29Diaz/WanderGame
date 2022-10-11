@@ -18,14 +18,4 @@ public class ArdillaBoss : MonoBehaviour
         transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
     }
 
-    public void Salto()
-    {
-        transform.Translate(Vector3.up* 2 * Time.deltaTime);
-        animator.SetBool("jump", true);
-    }
-
-    public void SalirSalto()
-    {
-        animator.SetBool("jump", false);
-    }
 }
