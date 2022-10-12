@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Boton1 : MonoBehaviour
 {
-    public void Jugar() { 
-     SceneManager.LoadScene("NivelTest")
+    public void Jugar() {
+        SceneManager.LoadScene("NivelTest");
     }
 }
