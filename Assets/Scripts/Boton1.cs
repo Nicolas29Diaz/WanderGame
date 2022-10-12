@@ -8,4 +8,12 @@ public class Boton1 : MonoBehaviour
     public void Jugar() {
         SceneManager.LoadScene("NivelTest");
     }
+    public void Cambiar()
+    {
+        SceneManager.LoadScene("Instrucciones");
+    }
+    public void Salir()
+    {
+        SceneManager.LoadScene("Interfaz1");
+    }
 }
