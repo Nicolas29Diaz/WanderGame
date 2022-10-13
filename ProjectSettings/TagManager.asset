@@ -9,6 +9,7 @@ TagManager:
   - Escaleras2
   - LanzaNueces
   - "Pu\xF1o"
+  - Enemy
   layers:
   - Default
   - TransparentFX

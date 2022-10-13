@@ -169,5 +169,7 @@ public class CombatePersonaje : MonoBehaviour
             Debug.Log("LANZA NUECES DESBLOQUEADO, PULSA '1' PARA CAMBIAR MODO DE ATAQUE");
             lanzaNuecesEncontrado = true;
         }
-    }   
+    }
+
+
 }
