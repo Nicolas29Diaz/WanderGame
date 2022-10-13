@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BarraDeVida : MonoBehaviour
 {
-    private Slider slider;
+    public Slider slider;
 
     // Start is called before the first frame update
     void Start()
