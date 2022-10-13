@@ -30,15 +30,16 @@ public class ArdillaMeleeEnemy : MonoBehaviour
             transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
             if (infoSueloFrenado == false)
             {
+                transform.position = transform.position;
                 animator.SetBool("walk", false);
                 animator.SetBool("run", false);
-                transform.position = transform.position;
             }
             else if (Vector3.Distance(transform.position, player.transform.position) < distanciaPerseguir)
             {
-                animator.SetBool("run", true);
                 gameObject.GetComponent<MovPlataforma>().patrullando = false;
                 transform.Translate(Vector3.forward * velocidad * Time.deltaTime);
+                animator.SetBool("run", true);
+                animator.SetBool("walk", false);
             }
             
             if (Vector3.Distance(transform.position, player.transform.position) < distanciaAtaque)
@@ -51,6 +52,7 @@ public class ArdillaMeleeEnemy : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         gameObject.GetComponent<MovPlataforma>().patrullando = true;
+        animator.SetBool("walk", true);
     }
 
 }

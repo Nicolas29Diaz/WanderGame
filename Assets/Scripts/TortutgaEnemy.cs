@@ -8,9 +8,11 @@ public class TortutgaEnemy : MonoBehaviour
 
     public GameObject player;
 
+    private Animator animator;
+
     private void Start()
     {
-        
+        animator = gameObject.GetComponent<Animator>();
     }
 
 
@@ -23,9 +25,11 @@ public class TortutgaEnemy : MonoBehaviour
             {
                 gameObject.GetComponent<MovPlataforma>().patrullando = false;
                 transform.position = transform.position;
+                animator.SetBool("walk", false);
             }
             else
             {
+                animator.SetBool("walk", true);
                 gameObject.GetComponent<MovPlataforma>().patrullando = true;
             }
 
