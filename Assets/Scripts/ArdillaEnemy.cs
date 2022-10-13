@@ -56,7 +56,7 @@ public class ArdillaEnemy : MonoBehaviour
             }
 
 
-            transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
+            transform.LookAt(new Vector3(jugador.position.x, transform.position.y, transform.position.z));
             if (tiempoEsperado <= 0)
             {
                 transform.position = transform.position;

@@ -5,7 +5,6 @@ using UnityEngine;
 public class ArdillaMeleeEnemy : MonoBehaviour
 {
     public float distanciaPerseguir;
-    public float distanciaAtaque;
     public float velocidad;
     public bool infoSueloFrenado;
 
@@ -23,11 +22,11 @@ public class ArdillaMeleeEnemy : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        animator.SetBool("run", false);
+        // animator.SetBool("run", false);
         infoSueloFrenado = Physics.Raycast(controladorSueloFrenado.position, Vector3.down, distanciaRayo);
         if (other.CompareTag("Player"))
         {
-            transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
+            transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, transform.position.z));
             if (infoSueloFrenado == false)
             {
                 transform.position = transform.position;
@@ -41,11 +40,6 @@ public class ArdillaMeleeEnemy : MonoBehaviour
                 animator.SetBool("run", true);
                 animator.SetBool("walk", false);
             }
-            
-            if (Vector3.Distance(transform.position, player.transform.position) < distanciaAtaque)
-            {
-                Debug.Log("estoy atacando");
-            }
         }
     }
 
@@ -53,6 +47,14 @@ public class ArdillaMeleeEnemy : MonoBehaviour
     {
         gameObject.GetComponent<MovPlataforma>().patrullando = true;
         animator.SetBool("walk", true);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            collision.collider.GetComponent<VidaPlayer>().TomarDaño(20);
+        }
     }
 
 }
