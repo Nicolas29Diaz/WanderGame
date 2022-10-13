@@ -11,6 +11,9 @@ public class Caparazon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Daño por caparazon");
+        if (other.CompareTag("player"))
+        {
+            Debug.Log("Daño por caparazon");
+        }
     }
 }

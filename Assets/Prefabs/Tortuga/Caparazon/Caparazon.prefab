@@ -90,8 +90,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6170796200317475566}
-  - component: {fileID: 7721242464193187332}
   - component: {fileID: 1317164414408464130}
+  - component: {fileID: 4737201637019993636}
   m_Layer: 0
   m_Name: Caparazon
   m_TagString: Untagged
@@ -114,19 +114,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!135 &7721242464193187332
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7629106093249443418}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.4906707
-  m_Center: {x: 0, y: 0.36, z: -0.5886983}
 --- !u!114 &1317164414408464130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,3 +126,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9944934a9b52ca4b841eecb45036200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &4737201637019993636
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629106093249443418}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 2.0391467
+  m_Height: 2.9130661
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.35926938, z: -0.42484847}

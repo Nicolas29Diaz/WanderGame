@@ -38,7 +38,7 @@ public class CombatePersonaje : MonoBehaviour
     
     }
 
-    public void cambiarVidaActual (float cantidadVidal)
+    public void cambiarVidaActual (float cantidadVida)
     {
         slider.value = cantidadVida;
     }

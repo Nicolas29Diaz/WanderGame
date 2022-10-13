@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovPlataforma : MonoBehaviour
+public class Prueb : MonoBehaviour
 {
     public bool patrullando;
     public float velocidad;
