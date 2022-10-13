@@ -23,6 +23,7 @@ public class DispararNuezEnemy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Destroy(gameObject);
+            other.GetComponent<VidaPlayer>().TomarDaño(20);
         }
     }
 }

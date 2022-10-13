@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class CombatePersonaje : MonoBehaviour
 {
     MovementPlayer movPlayer;
-    public int vidaPersonaje = 100;
 
     [Header("Disapro")]
     public Transform controladorDisparo;
@@ -19,7 +18,6 @@ public class CombatePersonaje : MonoBehaviour
     public bool activarlanzaNueces;
     public GameObject lanzaNueces;
 
-    private Slider slider;
 
     // Start is called before the first frame update
     void Start()
@@ -29,24 +27,6 @@ public class CombatePersonaje : MonoBehaviour
         lanzaNuecesEncontrado = false;
         movPlayer.puedoEscalar = true;
         activarlanzaNueces = false;
-        slider = GetComponent<Slider>();
-    }
-
-    public void cambiarVida(float vidaMaxima) {
-
-        slider.maxValue = vidaMaxima;
-    
-    }
-
-    public void cambiarVidaActual (float cantidadVida)
-    {
-        slider.value = cantidadVida;
-    }
-
-    public void inicializarVida(float cantidadVida)
-    {
-        cambiarVida(cantidadVida);
-        cambiarVidaActual(cantidadVida);
     }
 
     // Update is called once per frame
