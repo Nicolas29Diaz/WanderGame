@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: e434d2a63e5696845b52ed7885f7c19d
+guid: 0adf5fb14c1aaca45b052164ea562658
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Crouch Walk Forward
+    second: Mutant Dying
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Crouch Walk Forward
+      name: Mutant Dying
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 34
+      lastFrame: 138
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
