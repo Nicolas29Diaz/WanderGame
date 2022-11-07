@@ -16,6 +16,7 @@ public class MiniBoss : MonoBehaviour
     public float velocidad;
     public GameObject[] hit;
     public int hit_Select;
+    public int melee;
 
     public float HP_Min;
     public float HP_Max;
@@ -29,41 +30,55 @@ public class MiniBoss : MonoBehaviour
 
     public void Comportamiento_MiniBoss()
     {
-        if(Vector3.Distance(target.transform.position, transform.position) < 15)
+        if (Vector3.Distance(target.transform.position, transform.position) < 15)
         {
             var lookPos = target.transform.position - transform.position;
             lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
 
-            if(Vector3.Distance(target.transform.position, transform.position) > 1 && !atacando)
+            if (Vector3.Distance(target.transform.position, transform.position) > 1 )
             {
-                switch (rutina)
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
+                transform.Translate(Vector3.right * velocidad * Time.deltaTime);
+                animator.SetBool("Walk", true);
+
+                //if (transform.rotation == rotation)
+                //{
+                //    transform.Translate(Vector3.right * velocidad * Time.deltaTime);
+                //}
+
+                animator.SetBool("Attack", false);
+
+                cronometro += 1 * Time.deltaTime;
+                if (cronometro > time_rutinas)
+                {
+                    rutina += 1;
+                    cronometro = 0;
+                }
+            }
+            else if (Vector3.Distance(target.transform.position, transform.position) < 1 && rutina > 0)
+            {
+                melee = Random.Range(0, 4);
+                switch (melee)
                 {
                     case 0:
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                        animator.SetBool("Walk", true);
-
-                        if (transform.rotation == rotation)
-                        {
-                            transform.Translate(Vector3.right * velocidad * Time.deltaTime);
-                        }
-
-                        animator.SetBool("Attack", false);
-
-                        cronometro += 1 * Time.deltaTime;
-                        if(cronometro > time_rutinas)
-                        {
-                            rutina = Random.Range(0, 2);
-                            cronometro = 0;
-                        }
+                        animator.SetFloat("Skills", 0);
+                        hit_Select = 0;
                         break;
                     case 1:
-                        animator.SetBool("Walk", false);
-                        animator.SetBool("Attack", true);
-                        animator.SetFloat("Skills", 0);
-                        rango.GetComponent<CapsuleCollider>().enabled = false;
+                        animator.SetFloat("Skills", 0.5f);
+                        hit_Select = 1;
+                        break;
+                    case 2:
+                        animator.SetFloat("Skills", 1);
+                        hit_Select = 2;
                         break;
                 }
+
+                animator.SetBool("Walk", false);
+                animator.SetBool("Attack", true);
+                atacando = true;
+                GetComponent<CapsuleCollider>().enabled = false;
             }
         }
     }
@@ -90,7 +105,7 @@ public class MiniBoss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(HP_Min > 0)
+        if (HP_Min > 0)
         {
             Comportamiento_MiniBoss();
         }
