@@ -10,8 +10,7 @@ public class MiniBossArdilla : MonoBehaviour
     public Transform jugador;
 
     public float velocidad;
-    public GameObject[] hit;
-    public int hit_Select;
+    public GameObject hit;
     public int melee;
 
     public float vida;
@@ -31,15 +30,12 @@ public class MiniBossArdilla : MonoBehaviour
                 {
                     case 0:
                         animator.SetFloat("Skills", 0);
-                        hit_Select = 0;
                         break;
                     case 1:
                         animator.SetFloat("Skills", 0.5f);
-                        hit_Select = 1;
                         break;
                     case 2:
                         animator.SetFloat("Skills", 1);
-                        hit_Select = 2;
                         break;
                 }
 
@@ -58,12 +54,12 @@ public class MiniBossArdilla : MonoBehaviour
 
     public void ColliderAttackTrue()
     {
-        hit[hit_Select].GetComponent<SphereCollider>().enabled = true;
+        hit.GetComponent<SphereCollider>().enabled = true;
     }
 
     public void ColliderAttackFalse()
     {
-        hit[hit_Select].GetComponent<SphereCollider>().enabled = false;
+        hit.GetComponent<SphereCollider>().enabled = false;
     }
 
     // Start is called before the first frame update
