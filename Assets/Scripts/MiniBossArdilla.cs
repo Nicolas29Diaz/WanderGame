@@ -8,47 +8,51 @@ public class MiniBossArdilla : MonoBehaviour
     public Animator animator;
     public Transform jugador;
 
+    public GameObject ataque;
     public GameObject hit;
     public int melee;
 
     public float vida;
+    public float cronometro;
+    public int rutina;
+    public bool atacando;
 
     public void Comportamiento()
     {
-        transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
-        if (Vector3.Distance(jugador.position, transform.position) < 15)
+        cronometro += 1 * Time.deltaTime;
+        if (cronometro > 2)
         {
+            cronometro = 0;
+            rutina += 1;
+        }
+        
+        if (Vector3.Distance(jugador.position, transform.position) <= 1 && rutina >= 1)
+        {
+            transform.position = transform.position;
+            animator.SetBool("Walk", false);
+            animator.SetBool("Attack", true);
+            ataque.GetComponent<BoxCollider>().enabled = false;
+            atacando = true;
+        }
+        else if (Vector3.Distance(jugador.position, transform.position) <= 1 && rutina < 1)
+        {
+            transform.position = transform.position;
+        }
+        else if (Vector3.Distance(jugador.position, transform.position) < 15 && !atacando)
+        {
+            transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
             transform.Translate(Vector3.forward * velocidad * Time.deltaTime);
             animator.SetBool("Walk", true);
             animator.SetBool("Attack", false);
-           
         }
-        else if (Vector3.Distance(jugador.position, transform.position) <= 5)
-        {
-            animator.SetBool("Walk", false);
-            animator.SetBool("Attack", true);
-            gameObject.GetComponent<CapsuleCollider>().enabled = false;
-            transform.position = transform.position;
-            melee = Random.Range(0, 4);
-            switch (melee)
-            {
-                case 0:
-                    animator.SetFloat("Skills", 0);
-                    break;
-                case 1:
-                    animator.SetFloat("Skills", 0.5f);
-                    break;
-                case 2:
-                    animator.SetFloat("Skills", 1);
-                    break;
-            }
-        }
-
     }
 
     public void Final_Animacion()
     {
+        ataque.GetComponent<BoxCollider>().enabled = true;
         animator.SetBool("Attack", false);
+        rutina = 0;
+        atacando = false;
     }
 
     public void ColliderAttackTrue()
@@ -76,9 +80,11 @@ public class MiniBossArdilla : MonoBehaviour
             Comportamiento();
         }
         else 
-        { 
-            animator.SetTrigger("Dead");
-            Destroy(gameObject);
+        {
+            animator.SetBool("Walk", false);
+            animator.SetBool("Attack", false);
+            animator.SetBool("Dead", true);
+            Destroy(gameObject, 6);
         }
     }
 }
