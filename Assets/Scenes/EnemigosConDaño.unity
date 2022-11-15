@@ -4285,6 +4285,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArdillaBoss
       objectReference: {fileID: 0}
+    - target: {fileID: 923524722295430824, guid: 3079e52bbd96f9c45973846ac80c33ba, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a8f327433424d984c8ecef0fd6070dd8, type: 2}
     - target: {fileID: 5866666021909216657, guid: 3079e52bbd96f9c45973846ac80c33ba, type: 3}
       propertyPath: m_Controller
       value: 
