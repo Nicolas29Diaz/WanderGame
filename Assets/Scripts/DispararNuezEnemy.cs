@@ -25,5 +25,20 @@ public class DispararNuezEnemy : MonoBehaviour
             Destroy(gameObject);
             other.GetComponent<VidaPlayer>().TomarDaño(20);
         }
+        //if (other.CompareTag("RocaDestroy"))
+        //{
+        //    other.GetComponent<RocaDestroy>().BajarVidaRoca();
+        //    Debug.Log("ROCA");
+        //    Destroy(gameObject);
+        //}
+
     }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.tag == "RocaDestroy")
+    //    {
+    //        Debug.Log("ROCA");
+    //    }
+    //}
 }
