@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class VidaPlayer : MonoBehaviour
 {
     public float vida;
     public float maximoVida;
     public BarraDeVida barraDeVida;
-
+    public GameObject menuPsusa;
+    private bool menuOn;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,7 @@ public class VidaPlayer : MonoBehaviour
         if(vida == 0)
         {
             Destroy(gameObject);
+            SceneManager.LoadScene("Interfaz Final");
         }
     }
 }
