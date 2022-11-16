@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class MiniBossArdilla : MonoBehaviour
@@ -16,6 +18,18 @@ public class MiniBossArdilla : MonoBehaviour
     public float cronometro;
     public int rutina;
     public bool atacando;
+
+    public float maximoVida;
+
+    public float dañoPuño = 4;
+    public float dañoNuez = 5;
+
+    CombatePersonaje personaje;
+
+    public int contPuño = 0;
+    public int contNuez = 0;
+
+    public GameObject lanzanueces;
 
     public void Comportamiento()
     {
@@ -70,6 +84,12 @@ public class MiniBossArdilla : MonoBehaviour
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
+        vida = maximoVida;
+    }
+
+    public void TomarDaño(float daño)
+    {
+        vida -= daño;
     }
 
     // Update is called once per frame
@@ -84,7 +104,33 @@ public class MiniBossArdilla : MonoBehaviour
             animator.SetBool("Walk", false);
             animator.SetBool("Attack", false);
             animator.SetBool("Dead", true);
+            Instantiate(lanzanueces, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
             Destroy(gameObject, 6);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Puño")
+        {
+            contPuño++;
+            if (contPuño > 1)
+            {
+                TomarDaño(dañoPuño);
+                contPuño = 0;
+            }
+        }
+        if (other.gameObject.tag == "Nuez")
+        {
+            contNuez++;
+            if (contNuez > 1)
+            {
+                TomarDaño(dañoNuez);
+                contNuez = 0;
+                Destroy(other.gameObject);
+            }
+
+
         }
     }
 }

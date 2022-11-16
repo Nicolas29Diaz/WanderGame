@@ -52,6 +52,7 @@ public class VidaEnemy : MonoBehaviour
             {
                TomarDaño(dañoNuez);
                 contNuez = 0;
+                Destroy(other.gameObject); 
             }
             
             
