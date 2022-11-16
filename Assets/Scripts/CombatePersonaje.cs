@@ -18,6 +18,10 @@ public class CombatePersonaje : MonoBehaviour
     public bool activarlanzaNueces;
     public GameObject lanzaNueces;
 
+    public BoxCollider puño1;
+    public BoxCollider puño2;
+
+    public int cantidadNueces = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +31,8 @@ public class CombatePersonaje : MonoBehaviour
         lanzaNuecesEncontrado = false;
         movPlayer.puedoEscalar = true;
         activarlanzaNueces = false;
+
+        DesactivarCollidersArma();
     }
 
     // Update is called once per frame
@@ -48,13 +54,20 @@ public class CombatePersonaje : MonoBehaviour
 
         if (cambioModoArma && lanzaNuecesEncontrado)
         {
-            Debug.Log("Disparo");
+            //Debug.Log("Disparo");
             movPlayer.animator.SetLayerWeight(0, 0);
             movPlayer.animator.SetLayerWeight(1, 1);
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Disparar();
+                Debug.Log("Nueces: " + cantidadNueces);
+                if(cantidadNueces > 0)
+                {
+                    Disparar();
+                    cantidadNueces -= 1;
+
+                }
+                
             }
 
 
@@ -71,6 +84,8 @@ public class CombatePersonaje : MonoBehaviour
 
     public void PegarMelee()
     {
+       
+
         movPlayer.animator.SetBool("cambiarMano", movPlayer.cambiarMano);
 
         movPlayer.cambiarMano = !movPlayer.cambiarMano;
@@ -79,11 +94,14 @@ public class CombatePersonaje : MonoBehaviour
 
         movPlayer.pegando = true;
 
+        ActivarCollidersArma(movPlayer.cambiarMano);
+
     }
     public void dejarPegar()
     {
         movPlayer.pegando = false;
         movPlayer.animator.SetBool("Pegar", false);
+        DesactivarCollidersArma();
     }
 
 
@@ -159,7 +177,30 @@ public class CombatePersonaje : MonoBehaviour
         }
 
     }
+    public void ActivarCollidersArma(bool cambiarMano)
+    {
+        if (cambiarMano)
+        {
+            puño1.enabled = true;
+            puño2.enabled = false;
+        }
+        else
+        {
+            puño1.enabled = false;
+            puño2.enabled = true;
+        }
 
+    }
+    public void DesactivarCollidersArma()
+    {
+        puño1.enabled = false;
+        puño2.enabled = false;
+    }
+
+    public void AgarrarNueces(int cantidad)
+    {
+        cantidadNueces += cantidad;
+    }
 
 
     private void OnTriggerStay(Collider other)
@@ -170,6 +211,7 @@ public class CombatePersonaje : MonoBehaviour
             lanzaNuecesEncontrado = true;
         }
     }
+
 
 
 }

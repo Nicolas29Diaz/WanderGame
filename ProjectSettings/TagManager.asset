@@ -10,6 +10,8 @@ TagManager:
   - LanzaNueces
   - "Pu\xF1o"
   - Enemy
+  - Nuez
+  - RocaDestroy
   layers:
   - Default
   - TransparentFX
