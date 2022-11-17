@@ -54,7 +54,7 @@ public class MiniBossArdilla : MonoBehaviour
         {
             transform.position = transform.position;
         }
-        else if (Vector3.Distance(jugador.position, transform.position) < 15 && !atacando)
+        else if (Vector3.Distance(jugador.position, transform.position) < 5 && !atacando)
         {
             transform.LookAt(new Vector3(jugador.position.x, transform.position.y, jugador.position.z));
             transform.Translate(Vector3.forward * velocidad * Time.deltaTime);

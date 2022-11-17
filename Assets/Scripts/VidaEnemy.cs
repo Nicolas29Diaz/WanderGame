@@ -15,7 +15,7 @@ public class VidaEnemy : MonoBehaviour
     public int contPuño = 0;
     public int contNuez = 0;
 
-
+    public int contNueces = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -27,10 +27,15 @@ public class VidaEnemy : MonoBehaviour
     public void TomarDaño(float daño)
     {
         vida -= daño;
-        if(vida <= 0)
+      
+    }
+    void Update()
+    {
+        if (vida <= 0)
         {
+         
             Destroy(gameObject);
-            personaje.AgarrarNueces(5);
+            //personaje.AgarrarNueces(5);
         }
     }
 

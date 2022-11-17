@@ -40,6 +40,7 @@ public class CombatePersonaje : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        textoNueces.text = cantidadNueces.ToString();
         //PEGAR
         if (Input.GetKeyDown(KeyCode.C) && !movPlayer.saltando && !movPlayer.pegando && movPlayer.isGrounded && !cambioModoArma)
         {
@@ -201,6 +202,7 @@ public class CombatePersonaje : MonoBehaviour
 
     public void AgarrarNueces(int cantidad)
     {
+        
         cantidadNueces += cantidad;
     }
 
