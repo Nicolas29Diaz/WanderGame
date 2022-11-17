@@ -22,6 +22,7 @@ public class CombatePersonaje : MonoBehaviour
     public BoxCollider puño2;
 
     public int cantidadNueces = 10;
+    public Text textoNueces;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,7 @@ public class CombatePersonaje : MonoBehaviour
         lanzaNuecesEncontrado = false;
         movPlayer.puedoEscalar = true;
         activarlanzaNueces = false;
+        textoNueces.text = cantidadNueces.ToString();
 
         DesactivarCollidersArma();
     }
