@@ -31,6 +31,8 @@ public class MiniBossArdilla : MonoBehaviour
 
     public GameObject lanzanueces;
 
+    public int instanciarLanzaNueces = 0;
+
     public void Comportamiento()
     {
         cronometro += 1 * Time.deltaTime;
@@ -101,11 +103,17 @@ public class MiniBossArdilla : MonoBehaviour
         }
         else 
         {
+            instanciarLanzaNueces++;
             animator.SetBool("Walk", false);
             animator.SetBool("Attack", false);
             animator.SetBool("Dead", true);
-            Instantiate(lanzanueces, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
+            if(instanciarLanzaNueces == 1)
+            {
+                Instantiate(lanzanueces, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+                
+            }
             Destroy(gameObject, 6);
+            
         }
     }
 
